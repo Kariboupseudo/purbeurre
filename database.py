@@ -1,3 +1,6 @@
+from DatabaseUpdator import *
+from ExtractFromJson import *
+from JsonFromApi import *
 import mysql.connector
 
 class Database :
@@ -22,7 +25,6 @@ class Database :
         self.mycursor.execute('CREATE TABLE IF NOT EXISTS product(\
                 PROD_id BIGINT PRIMARY KEY,\
                 PROD_name VARCHAR(100) NOT NULL,\
-                PROD_descr VARCHAR(150) NOT NULL,\
                 PROD_grade CHAR(1) NOT NULL,\
                 PROD_url VARCHAR(150) NOT NULL UNIQUE)')
 
@@ -32,7 +34,16 @@ class Database :
 
         self.mycursor.execute('CREATE TABLE IF NOT EXISTS category(\
             CAT_id int PRIMARY KEY AUTO_INCREMENT,\
-            CAT_nom VARCHAR(50) UNIQUE)')   
+            CAT_nom VARCHAR(50) UNIQUE)')
+
+    def fill_in(self,category):
+        """ fills in the all database with products of the given category """
+        api_json = JsonFromApi(category)
+        extracted_data = ExtractFromJson(api_json.get_json())
+        self.fill_in_db = DatabaseUpdator(
+            extracted_data.extract_json(), self.mydb)
+        self.fill_in_db.table_product_update()
+        self.fill_in_db.table_category_update() 
         
 
 

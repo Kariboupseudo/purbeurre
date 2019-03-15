@@ -11,6 +11,7 @@ requests = "*"
 openfoodfacts = {git = "https://github.com/openfoodfacts/openfoodfacts-python"}
 records = {extras = ["pandas"],version = "*"}
 pymysql = "*"
+pyyaml = "*"
 
 [requires]
 python_version = "3.7"
